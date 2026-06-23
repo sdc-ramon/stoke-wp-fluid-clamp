@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Stoke Fluid Clamp
  * Description: Generates fluid clamp() CSS custom properties from a max px value. Set the viewport range once, add tokens, use the vars anywhere (Elementor, SCSS, raw CSS).
- * Version:     1.26.6.23
+ * Version:     1.26.6.23.1018
  * Author:      Stoke Design Co
  */
 
@@ -213,7 +213,7 @@ class Stoke_Fluid_Clamp {
 					<thead>
 						<tr>
 							<th style="width:22%;">Variable name <span class="description">(no <code>--</code>)</span></th>
-							<th style="width:13%;">Min px <span class="description">(overrides ratio)</span></th>
+							<th style="width:13%;">Min px </th>
 							<th style="width:10%;">Max px</th>
 							<th>Generated value</th>
 							<th style="width:16%;">Copy var</th>
@@ -236,9 +236,11 @@ class Stoke_Fluid_Clamp {
 							?>
 							<tr>
 								<td><input type="text" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][name]" value="<?php echo esc_attr( $token['name'] ); ?>" placeholder="fs-display" class="regular-text" style="width:100%;"><input type="hidden" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][ratio]" value="<?php echo esc_attr( $token['ratio'] ?? '' ); ?>"></td>
+
 								<td><input type="number" step="0.01" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][min]" value="<?php echo esc_attr( $token['min'] ); ?>" class="small-text"></td>
 								<td><input type="number" step="0.01" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][max]" value="<?php echo esc_attr( $token['max'] ); ?>" placeholder="107" class="small-text"></td>
-								<td><code style="user-select:all;"><?php echo esc_html( $preview ); ?></code></td>
+								
+								<td><code style="user-select:all; white-space: nowrap;"><?php echo esc_html( $preview ); ?></code></td>
 								<td>
 									<?php if ( $var ) : ?>
 										<button type="button" class="button sfc-copy" data-var="<?php echo esc_attr( $var ); ?>"><?php echo esc_html( $var ); ?></button>
