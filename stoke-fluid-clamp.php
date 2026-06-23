@@ -169,6 +169,13 @@ class Stoke_Fluid_Clamp {
 					'min'   => ( '' !== ( $token['min'] ?? '' ) ) ? floatval( $token['min'] ) : '',
 				];
 			}
+
+			usort(
+				$clean['tokens'],
+				static function ( $a, $b ) {
+					return strcasecmp( $a['name'], $b['name'] );
+				}
+			);
 		}
 
 		return $clean;
@@ -206,7 +213,6 @@ class Stoke_Fluid_Clamp {
 					<thead>
 						<tr>
 							<th style="width:22%;">Variable name <span class="description">(no <code>--</code>)</span></th>
-							<th style="width:10%;">Ratio</th>
 							<th style="width:13%;">Min px <span class="description">(overrides ratio)</span></th>
 							<th style="width:10%;">Max px</th>
 							<th>Generated value</th>
@@ -229,8 +235,7 @@ class Stoke_Fluid_Clamp {
 							}
 							?>
 							<tr>
-								<td><input type="text" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][name]" value="<?php echo esc_attr( $token['name'] ); ?>" placeholder="fs-display" class="regular-text" style="width:100%;"></td>
-								<td><input type="number" step="0.05" min="0.1" max="1" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][ratio]" value="<?php echo esc_attr( $token['ratio'] ?? '' ); ?>" placeholder="0.5" class="small-text"></td>
+								<td><input type="text" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][name]" value="<?php echo esc_attr( $token['name'] ); ?>" placeholder="fs-display" class="regular-text" style="width:100%;"><input type="hidden" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][ratio]" value="<?php echo esc_attr( $token['ratio'] ?? '' ); ?>"></td>
 								<td><input type="number" step="0.01" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][min]" value="<?php echo esc_attr( $token['min'] ); ?>" class="small-text"></td>
 								<td><input type="number" step="0.01" name="<?php echo esc_attr( self::OPTION ); ?>[tokens][<?php echo (int) $i; ?>][max]" value="<?php echo esc_attr( $token['max'] ); ?>" placeholder="107" class="small-text"></td>
 								<td><code style="user-select:all;"><?php echo esc_html( $preview ); ?></code></td>
@@ -260,8 +265,7 @@ class Stoke_Fluid_Clamp {
 				const i   = tbody.rows.length ? Math.max( ...[ ...tbody.querySelectorAll( 'input[name*="[name]"]' ) ].map( el => parseInt( el.name.match( /\[tokens\]\[(\d+)\]/ )[1], 10 ) ) ) + 1 : 0;
 				const row = tbody.insertRow();
 				row.innerHTML =
-					'<td><input type="text" name="' + option + '[tokens][' + i + '][name]" placeholder="fs-h1" class="regular-text" style="width:100%;"></td>' +
-					'<td><input type="number" step="0.05" min="0.1" max="1" name="' + option + '[tokens][' + i + '][ratio]" placeholder="0.5" class="small-text"></td>' +
+					'<td><input type="text" name="' + option + '[tokens][' + i + '][name]" placeholder="fs-h1" class="regular-text" style="width:100%;"><input type="hidden" name="' + option + '[tokens][' + i + '][ratio]" value=""></td>' +
 					'<td><input type="number" step="0.01" name="' + option + '[tokens][' + i + '][min]" class="small-text"></td>' +
 					'<td><input type="number" step="0.01" name="' + option + '[tokens][' + i + '][max]" class="small-text"></td>' +
 					'<td><code></code></td>' +
