@@ -119,14 +119,12 @@ class Stoke_Fluid_Clamp {
 	/* ---------- Admin ---------- */
 
 	public static function admin_menu() {
-		add_menu_page(
+		add_options_page(
 			'Stoke Fluid Clamp',
 			'Stoke Fluid Clamp',
 			'manage_options',
 			'stoke-fluid-clamp',
-			[ __CLASS__, 'render_page' ],
-			'dashicons-editor-expand',
-			60
+			[ __CLASS__, 'render_page' ]
 		);
 	}
 
