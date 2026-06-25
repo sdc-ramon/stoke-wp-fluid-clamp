@@ -1,0 +1,55 @@
+name: Release on version bump
+
+# When the Version: header in the main plugin file changes on main,
+# tag the commit and publish a GitHub Release. The Stoke Fluid Clamp
+# updater reads releases/latest, so publishing is what ships the update.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - stoke-fluid-clamp.php
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read version from plugin header
+        id: version
+        run: |
+          VERSION=$(grep -iE '^\s*\*?\s*Version:' stoke-fluid-clamp.php | head -1 | sed -E 's/.*Version:\s*//I' | tr -d '[:space:]')
+          if [ -z "$VERSION" ]; then
+            echo "Could not parse Version header" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release ${{ steps.version.outputs.tag }} already exists — skipping."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --title "${{ steps.version.outputs.version }}" \
+            --target "${{ github.sha }}" \
+            --generate-notes
