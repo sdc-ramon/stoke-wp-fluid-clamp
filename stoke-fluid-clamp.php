@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Stoke Fluid Clamp
  * Description: Generates fluid clamp() CSS custom properties from a max px value. Set the viewport range once, add tokens, use the vars anywhere (Elementor, SCSS, raw CSS).
- * Version:     1.26.6.25.1137
+ * Version:     1.26.6.26
  * Author:      Stoke Design Co
  */
 
@@ -119,12 +119,14 @@ class Stoke_Fluid_Clamp {
 	/* ---------- Admin ---------- */
 
 	public static function admin_menu() {
-		add_options_page(
+		add_menu_page(
 			'Stoke Fluid Clamp',
 			'Stoke Fluid Clamp',
 			'manage_options',
 			'stoke-fluid-clamp',
-			[ __CLASS__, 'render_page' ]
+			[ __CLASS__, 'render_page' ],
+			'dashicons-editor-expand',
+			60
 		);
 	}
 
