@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/updater/updater.php';
+
 class Stoke_Fluid_Clamp {
 
 	const OPTION        = 'sfc_settings';
@@ -301,3 +303,9 @@ class Stoke_Fluid_Clamp {
 }
 
 Stoke_Fluid_Clamp::init();
+
+if ( ! function_exists( 'get_file_data' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
+}
+$sfc_data = get_file_data( __FILE__, [ 'version' => 'Version' ] );
+new Stoke_Fluid_Clamp_Updater( __FILE__, $sfc_data['version'] );
